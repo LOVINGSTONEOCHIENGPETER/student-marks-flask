@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        input { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Add Student</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/" method="POST">
+        <label>ID:</label><br>
+        <input type="number" name="id" placeholder="Enter student ID"><br>
+
+        <label>Name:</label><br>
+        <input type="text" name="name" placeholder="Enter name"><br>
+
+        <label>Math:</label><br>
+        <input type="number" name="math" placeholder="Math score"><br>
+
+        <label>English:</label><br>
+        <input type="number" name="english" placeholder="English score"><br>
+
+        <label>Science:</label><br>
+        <input type="number" name="science" placeholder="Science score"><br>
+
+        <label>Social:</label><br>
+        <input type="number" name="social" placeholder="Social score"><br>
+
+        <label>Kiswahili:</label><br>
+        <input type="number" name="kiswahili" placeholder="Kiswahili score"><br>
+
+        <input type="submit" value="Add Student">
+    </form>
+</body>
+</html>
