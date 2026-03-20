@@ -1,52 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Student</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .success { color: green; }
-        .error { color: red; }
-        input { margin-bottom: 10px; }
-    </style>
+    <title>Student System</title>
 </head>
 <body>
-    <h1>Add Student</h1>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul>
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+<h2>Add Student</h2>
 
-    <form action="/" method="POST">
-        <label>ID:</label><br>
-        <input type="number" name="id" placeholder="Enter student ID"><br>
+<form action="/add" method="POST">
+    <input type="text" name="name" placeholder="Name" required><br><br>
+    <input type="number" name="age" placeholder="Age" required><br><br>
+    <input type="text" name="grade" placeholder="Grade"><br><br>
+    <input type="number" name="marks" placeholder="Marks"><br><br>
+    <button type="submit">Add</button>
+</form>
 
-        <label>Name:</label><br>
-        <input type="text" name="name" placeholder="Enter name"><br>
+<hr>
 
-        <label>Math:</label><br>
-        <input type="number" name="math" placeholder="Math score"><br>
+<h2>Students List</h2>
 
-        <label>English:</label><br>
-        <input type="number" name="english" placeholder="English score"><br>
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Grade</th>
+    <th>Marks</th>
+    <th>Action</th>
+</tr>
 
-        <label>Science:</label><br>
-        <input type="number" name="science" placeholder="Science score"><br>
+{% for student in students %}
+<tr>
+<form action="/update/{{ student.id }}" method="POST">
+    <td>{{ student.id }}</td>
+    <td><input type="text" name="name" value="{{ student.name }}"></td>
+    <td><input type="number" name="age" value="{{ student.age }}"></td>
+    <td><input type="text" name="grade" value="{{ student.grade }}"></td>
+    <td><input type="number" name="marks" value="{{ student.marks }}"></td>
+    <td>
+        <button type="submit">Update</button>
+        <a href="/delete/{{ student.id }}">Delete</a>
+    </td>
+</form>
+</tr>
+{% endfor %}
 
-        <label>Social:</label><br>
-        <input type="number" name="social" placeholder="Social score"><br>
+</table>
 
-        <label>Kiswahili:</label><br>
-        <input type="number" name="kiswahili" placeholder="Kiswahili score"><br>
-
-        <input type="submit" value="Add Student">
-    </form>
 </body>
 </html>
