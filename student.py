@@ -1,70 +1,96 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import mysql.connector
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # Required for flash messages
 
-# ---------------- Database connection ---------------- #
-def db_connection():
-    # Replace with your PlanetScale credentials
+# Database connection
+def get_db_connection():
     conn = mysql.connector.connect(
-        host="your-planetscale-host",       # e.g., us-east.connect.psdb.io
-        user="your-username",               # PlanetScale username
-        password="your-password-or-token",  # PlanetScale password or token
-        database="elimu_predict_online"     # Your PlanetScale database
-        # ssl_disabled=True                 # Uncomment if testing without SSL (not recommended)
+        host='ballast.proxy.rlwy.net',
+        user='root',
+        password='cMWpCHeUcTiBBVTwUrQrbkRuSNLdFRsQ',
+        database='railway',
+        port=53565
     )
     return conn
 
-# ---------------- Add student route ---------------- #
-@app.route("/", methods=["GET", "POST"])
+# Home / View all students
+@app.route('/')
+def index():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM students")
+    students = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('students.html', students=students)
+
+# Add student
+@app.route('/add', methods=['POST'])
 def add_student():
-    if request.method == "POST":
-        id_ = request.form.get("id")
-        name = request.form.get("name")
-        math = request.form.get("math")
-        english = request.form.get("english")
-        science = request.form.get("science")
-        social = request.form.get("social")
-        kiswahili = request.form.get("kiswahili")
+    name = request.form.get('name')
+    age = request.form.get('age')
+    grade = request.form.get('grade')
+    marks = request.form.get('marks')
 
-        # Validation
-        if not all([id_, name, math, english, science, social, kiswahili]):
-            flash("All fields are required!", "error")
-            return redirect(url_for("add_student"))
+    if not name or not age:
+        return "Name and Age are required!", 400
 
-        try:
-            # Convert numeric fields
-            id_ = int(id_)
-            math = int(math)
-            english = int(english)
-            science = int(science)
-            social = int(social)
-            kiswahili = int(kiswahili)
-        except ValueError:
-            flash("ID and scores must be numbers!", "error")
-            return redirect(url_for("add_student"))
+    try:
+        age = int(age)
+        marks = int(marks) if marks else None
+    except ValueError:
+        return "Age and Marks must be numbers!", 400
 
-        try:
-            con = db_connection()
-            cursor = con.cursor()
-            sql = """INSERT INTO students 
-                     (id, name, math, english, science, social, kiswahili)
-                     VALUES (%s,%s,%s,%s,%s,%s,%s)"""
-            cursor.execute(sql, (id_, name, math, english, science, social, kiswahili))
-            con.commit()
-            cursor.close()
-            con.close()
-            flash(f"Student {name} added successfully!", "success")
-        except mysql.connector.errors.IntegrityError:
-            flash(f"Student with ID {id_} already exists!", "error")
-        except Exception as e:
-            flash(f"Database error: {str(e)}", "error")
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO students (name, age, grade, marks) VALUES (%s, %s, %s, %s)",
+        (name, age, grade, marks)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('index'))
 
-        return redirect(url_for("add_student"))
+# Update student
+@app.route('/update/<int:id>', methods=['POST'])
+def update_student(id):
+    name = request.form.get('name')
+    age = request.form.get('age')
+    grade = request.form.get('grade')
+    marks = request.form.get('marks')
 
-    # GET request
-    return render_template("students.html")
+    if not name or not age:
+        return "Name and Age are required!", 400
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8000)
+    try:
+        age = int(age)
+        marks = int(marks) if marks else None
+    except ValueError:
+        return "Age and Marks must be numbers!", 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE students SET name=%s, age=%s, grade=%s, marks=%s WHERE id=%s",
+        (name, age, grade, marks, id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('index'))
+
+# Delete student
+@app.route('/delete/<int:id>', methods=['GET'])
+def delete_student(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM students WHERE id=%s", (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
