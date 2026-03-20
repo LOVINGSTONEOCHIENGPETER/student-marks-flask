@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
+import os
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # required for session
@@ -16,11 +17,11 @@ ADMIN_PASSWORD = "admin123"
 # ==========================
 def get_db_connection():
     return mysql.connector.connect(
-        host='ballast.proxy.rlwy.net',
-        user='root',
-        password='cMWpCHeUcTiBBVTwUrQrbkRuSNLdFRsQ',  # 🔴 replace
-        database='railway',
-        port=53565
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME'),
+        port=int(os.getenv('DB_PORT'))
     )
 
 # ==========================
