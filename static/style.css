@@ -1,0 +1,87 @@
+/* GENERAL */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    margin: 0;
+    padding: 0;
+}
+
+/* CENTER CONTENT */
+.container {
+    width: 90%;
+    margin: auto;
+    text-align: center;
+}
+
+/* LOGIN BOX */
+.login-box {
+    background: white;
+    width: 300px;
+    margin: 80px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* IMAGE */
+img {
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* INPUTS */
+input {
+    width: 90%;
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* BUTTONS */
+button {
+    background: #4facfe;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #007bff;
+}
+
+/* TABLE */
+table {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background: #007bff;
+    color: white;
+}
+
+/* LINKS */
+a {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+}
+
+/* FORM SECTION */
+.form-section {
+    background: white;
+    width: 50%;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 10px;
+}

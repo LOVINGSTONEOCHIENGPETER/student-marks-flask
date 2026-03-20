@@ -2,24 +2,31 @@
 <html>
 <head>
     <title>Student System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h2>Add Student</h2>
+<div class="container">
+
+<h2>Student Management System</h2>
+
+<a href="/logout">Logout</a>
+
+<div class="form-section">
+<h3>Add Student</h3>
 
 <form action="/add" method="POST">
-    <input type="text" name="name" placeholder="Name" required><br><br>
-    <input type="number" name="age" placeholder="Age" required><br><br>
-    <input type="text" name="grade" placeholder="Grade"><br><br>
-    <input type="number" name="marks" placeholder="Marks"><br><br>
-    <button type="submit">Add</button>
+    <input type="text" name="name" placeholder="Name" required><br>
+    <input type="number" name="age" placeholder="Age" required><br>
+    <input type="text" name="grade" placeholder="Grade"><br>
+    <input type="number" name="marks" placeholder="Marks"><br>
+    <button type="submit">Add Student</button>
 </form>
+</div>
 
-<hr>
+<h3>Students List</h3>
 
-<h2>Students List</h2>
-
-<table border="1">
+<table>
 <tr>
     <th>ID</th>
     <th>Name</th>
@@ -46,6 +53,8 @@
 {% endfor %}
 
 </table>
+
+</div>
 
 </body>
 </html>
